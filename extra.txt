@@ -1,0 +1,14 @@
+AUTH_SECRET="Gm/GeyRuKNHxsoCqeDk6shm//cw+fxaIx5HAKZxq2+k=" # Added by `npx auth`. Read more: https://cli.authjs.dev
+
+.env.local uppar walla
+
+
+DATABASE_URL="mysql://root:garv-1234@localhost:3306/singitronic_nextjs"
+NEXTAUTH_SECRET=  "bg/0Lm77ZLfR7soyDvnRWUCiywmqP/A5Q0Apu3RRHz8="
+AUTH_SECRET="Gm/GeyRuKNHxsoCqeDk6shm//cw+fxaIx5HAKZxq2+k="
+NEXTAUTH_URL=http://localhost:3000
+
+.env me 
+
+
+
