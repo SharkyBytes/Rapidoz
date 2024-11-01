@@ -46,6 +46,7 @@ const LoginPage = () => {
     if (res?.error) {
       setError("Invalid email or password");
       toast.error("Invalid email or password");
+      router.push("/admin");
       if (res?.url) router.replace("/");
     } else {
       setError("");
