@@ -13,41 +13,42 @@ const CheckoutPage = () => {
     lastname: "",
     phone: "",
     email: "",
-    cardName: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvc: "",
+    // cardName: "",
+    // cardNumber: "",
+    // expirationDate: "",
+    // cvc: "",
     company: "",
     adress: "",
-    apartment: "",
+    // apartment: "",
     city: "",
     country: "",
     postalCode: "",
-    orderNotice: "",
-    upiId: 'garvag1926-1@okaxis', // Replace with your UPI ID
-    upiName: 'Garv Agarwal', // Replace with your name or business name
+    // orderNotice: "",
+    gstNumber: "",
+
 
   });
   const { products, total, clearCart } = useProductStore();
   const [showQRCode, setShowQRCode] = useState(false);
   const router = useRouter();
-
+  const upiId = 'garvag1926-1@okaxis'; // Your UPI ID
+  const upiName = 'Garv Agarwal';
   const makePurchase = async () => {
     if (
       checkoutForm.name.length > 0 &&
       checkoutForm.lastname.length > 0 &&
       checkoutForm.phone.length > 0 &&
       checkoutForm.email.length > 0 &&
-      checkoutForm.cardName.length > 0 &&
-      checkoutForm.expirationDate.length > 0 &&
-      checkoutForm.cvc.length > 0 &&
+      // checkoutForm.cardName.length > 0 &&
+      // checkoutForm.expirationDate.length > 0 &&
+      // checkoutForm.cvc.length > 0 &&
       checkoutForm.company.length > 0 &&
       checkoutForm.adress.length > 0 &&
-      checkoutForm.apartment.length > 0 &&
+      // checkoutForm.apartment.length > 0 &&
       checkoutForm.city.length > 0 &&
       checkoutForm.country.length > 0 &&
       checkoutForm.postalCode.length > 0
-      
+
     ) {
       if (!isValidNameOrLastname(checkoutForm.name)) {
         toast.error("You entered invalid format for name");
@@ -64,28 +65,6 @@ const CheckoutPage = () => {
         return;
       }
 
-      if (!isValidNameOrLastname(checkoutForm.cardName)) {
-        toast.error("You entered invalid format for card name");
-        return;
-      }
-
-      if (!isValidCardNumber(checkoutForm.cardNumber)) {
-        toast.error("You entered invalid format for credit card number");
-        return;
-      }
-
-      if (!isValidCreditCardExpirationDate(checkoutForm.expirationDate)) {
-        toast.error(
-          "You entered invalid format for credit card expiration date"
-        );
-        return;
-      }
-
-      if (!isValidCreditCardCVVOrCVC(checkoutForm.cvc)) {
-        toast.error("You entered invalid format for credit card CVC or CVV");
-        return;
-      }
-
       // sending API request for creating a order
       const response = fetch("http://localhost:3001/api/orders", {
         method: "POST",
@@ -99,15 +78,16 @@ const CheckoutPage = () => {
           email: checkoutForm.email,
           company: checkoutForm.company,
           adress: checkoutForm.adress,
-          apartment: checkoutForm.apartment,
+          // apartment: checkoutForm.apartment,
           postalCode: checkoutForm.postalCode,
           status: "processing",
           total: total,
           city: checkoutForm.city,
           country: checkoutForm.country,
-          orderNotice: checkoutForm.orderNotice,
+          gstNumber: checkoutForm.gstNumber,
+          // orderNotice: checkoutForm.orderNotice,
 
-          
+
         }),
       })
         .then((res) => res.json())
@@ -125,20 +105,18 @@ const CheckoutPage = () => {
             lastname: "",
             phone: "",
             email: "",
-            cardName: "",
-            cardNumber: "",
-            expirationDate: "",
-            cvc: "",
+            // cardName: "",
+            // cardNumber: "",
+            // expirationDate: "",
+            // cvc: "",
             company: "",
             adress: "",
-            apartment: "",
+            // apartment: "",
             city: "",
             country: "",
             postalCode: "",
-            orderNotice: "",
-            upiId: 'garvag1926-1@okaxis', // Replace with your UPI ID
-            upiName: 'Garv Agarwal', // Replace with your name or business name
-            
+            // orderNotice: "",
+            gstNumber: ""
           });
           clearCart();
           toast.success("Order created successfuly");
@@ -153,8 +131,7 @@ const CheckoutPage = () => {
   };
 
   var final = Math.round(total + total / 5 + 5);
-  console.log(Math.round(total + total / 5 + 5));
-  const upiUrl = `upi://pay?pa=${checkoutForm.upiId}&pn=${checkoutForm.upiName}&am=${final}&cu=INR&tn=Payment for order`;
+  const upiUrl = `upi://pay?pa=${upiId}&pn=${upiName}&am=${final / 2}&cu=INR&tn=Payment for order`;
 
 
   const addOrderProduct = async (
@@ -176,7 +153,7 @@ const CheckoutPage = () => {
     });
   };
 
-  
+
 
   useEffect(() => {
     if (products.length === 0) {
@@ -376,118 +353,33 @@ const CheckoutPage = () => {
                   />
                 </div>
               </div>
-            </section>
-
-            <section aria-labelledby="payment-heading" className="mt-10">
-              <h2
-                id="payment-heading"
-                className="text-lg font-medium text-gray-900"
-              >
-                Payment details
-              </h2>
-
-              <div className="mt-6 grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4">
-                <div className="col-span-3 sm:col-span-4">
-                  <label
-                    htmlFor="name-on-card"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name on card
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="name-on-card"
-                      name="name-on-card"
-                      autoComplete="cc-name"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cardName}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cardName: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-3 sm:col-span-4">
-                  <label
-                    htmlFor="card-number"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Card number
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="card-number"
-                      name="card-number"
-                      autoComplete="cc-number"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cardNumber}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cardNumber: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-2 sm:col-span-3">
-                  <label
-                    htmlFor="expiration-date"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Expiration date (MM/YY)
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="expiration-date"
-                      id="expiration-date"
-                      autoComplete="cc-exp"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.expirationDate}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          expirationDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="cvc"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    CVC or CVV
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="cvc"
-                      id="cvc"
-                      autoComplete="csc"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.cvc}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          cvc: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+              <div className="mt-6">
+                <label
+                  htmlFor="email-address"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  GST Number
+                </label>
+                <div className="mt-1">
+                  <input
+                    value={checkoutForm.gstNumber}
+                    onChange={(e) =>
+                      setCheckoutForm({
+                        ...checkoutForm,
+                        gstNumber: e.target.value,
+                      })
+                    }
+                    type="text"
+                    id="gstnumber"
+                    name="gstnumber"
+                    // autoComplete="email"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  />
                 </div>
               </div>
             </section>
+
+
 
             <section aria-labelledby="shipping-heading" className="mt-10">
               <h2
@@ -503,7 +395,7 @@ const CheckoutPage = () => {
                     htmlFor="company"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Company
+                    Firm Name
                   </label>
                   <div className="mt-1">
                     <input
@@ -541,30 +433,6 @@ const CheckoutPage = () => {
                         setCheckoutForm({
                           ...checkoutForm,
                           adress: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="apartment"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Apartment, suite, etc.
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="apartment"
-                      name="apartment"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      value={checkoutForm.apartment}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          apartment: e.target.value,
                         })
                       }
                     />
@@ -646,31 +514,17 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="order-notice"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Order notice
-                  </label>
-                  <div className="mt-1">
-                    <textarea
-                      className="textarea textarea-bordered textarea-lg w-full"
-                      id="order-notice"
-                      name="order-notice"
-                      autoComplete="order-notice"
-                      value={checkoutForm.orderNotice}
-                      onChange={(e) =>
-                        setCheckoutForm({
-                          ...checkoutForm,
-                          orderNotice: e.target.value,
-                        })
-                      }
-                    ></textarea>
-                  </div>
-                </div>
+
               </div>
             </section>
+
+            <div className="flex flex-col items-center mt-10">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">Scan to Pay</h3>
+              <QRCode value={upiUrl} size={256} />
+              {/* Optionally, provide instructions below */}
+              <p className="mt-4 text-sm text-gray-500 text-center max-w-xs">
+                Scan the QR code to book our services.</p>
+            </div>
 
             <div className="mt-10 border-t border-gray-200 pt-6 ml-0">
               <button
@@ -678,16 +532,9 @@ const CheckoutPage = () => {
                 onClick={makePurchase}
                 className="w-full rounded-md border border-transparent bg-blue-500 px-20 py-2 text-lg font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
               >
-                Pay Now
+                Ok, I Paid!
               </button>
-              {
-        <div className="mt-10">
-          <h3 className="text-lg font-medium text-gray-900">Scan to Pay</h3>
-          <QRCode value={upiUrl} size={256} />
-          {/* Optionally, provide instructions below */}
-          <p className="mt-2 text-sm text-gray-600">Scan the QR code to pay directly to my UPI account.</p>
-        </div>
-      }
+
             </div>
           </div>
         </form>
