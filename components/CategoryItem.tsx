@@ -8,25 +8,25 @@
 // Output: Category icon, category name and link to the category
 // *********************
 
-import Link from "next/link";
-import React, { type ReactNode } from "react";
+// CategoryItem.tsx
+import React from "react";
+import Image from "next/image";
 
-interface CategoryItemProps {
-  children: ReactNode;
+type CategoryItemProps = {
   title: string;
-  href: string;
-}
+  src: string;
+  description: string;
+};
 
-const CategoryItem = ({ title, children, href }: CategoryItemProps) => {
+const CategoryItem: React.FC<CategoryItemProps> = ({ title, src, description }) => {
   return (
-    <Link href={href}>
-      <div className="flex flex-col items-center gap-y-2 cursor-pointer bg-white py-5 text-black hover:bg-gray-100">
-        {children}
-
-        <h3 className="font-semibold text-xl">{title}</h3>
-      </div>
-    </Link>
+    <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center text-center transition-transform transform hover:scale-105">
+      <Image src={src} width={60} height={60} alt={title} className="mb-4 rounded-full" />
+      <h3 className="text-2xl font-semibold text-black mb-2">{title}</h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
   );
 };
 
 export default CategoryItem;
+
