@@ -1,13 +1,13 @@
 export const categoryMenuList = [
   {
     id: 1,
-    title: "Smart Phones",
+    title: "Social Media Listing",
     src: "/smart phone icon.png",
     href: "/shop/smart-phones"
   },
   {
     id: 2,
-    title: "Tablets",
+    title: "Improving So",
     src: "/tablet icon.png",
     href: "/shop/tablets"
   },
